@@ -30,3 +30,21 @@ also suggested by ustreamer readme (probably for the gpu encode on rpi4 so might
 gpu_mem=128
 cma=128M
 ```
+
+### terrible service
+```
+[Unit]
+Description=ustreamer hdmi input stream
+After=network.target
+After=systemd-user-sessions.service
+After=network-online.target
+
+
+[Service]
+ExecStart=/path/to/script/RPi5_hdmi_in_card/hardcoded.sh
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
+```
