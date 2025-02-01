@@ -1,6 +1,6 @@
 not a huge fan of og script especially due to it not working (tm)
 
-`/boot/firmware/config.txt
+`/boot/firmware/config.txt`
 ```
 dtparam=i2c_arm=on # doubt this does anything
 dtparam=i2s=on # doubt this does anything
