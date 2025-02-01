@@ -5,6 +5,9 @@ MEDIADEVICE=-1
 
 # hardcoded+works4me, important to change tc358743 11-000f to your device
 
+DIR='$DIR'
+
+
 i=0
 while true; do
     MEDIADEVICE=$(udevadm info -a -n /dev/media$i | grep --line-buffered 'DRIVERS=="\rp1-cfe"' | while read -r line; do echo $i; done)
@@ -15,7 +18,7 @@ while true; do
 done
 
 # Loading Driver
-v4l2-ctl -d /dev/v4l-subdev2 --set-edid=file=1080p50edid --fix-edid-checksums
+v4l2-ctl -d /dev/v4l-subdev2 --set-edid=file="$DIR"1080p50edid --fix-edid-checksums
 # Wait drive loads
 sleep 5s
 
@@ -45,7 +48,28 @@ echo "MEDIADEVICE: /dev/media$MEDIADEVICE"
 HEIGHT=$(v4l2-ctl -d /dev/v4l-subdev2 --query-dv-timings | grep 'Active height' | awk '{print $3}')
 WIDTH=$(v4l2-ctl -d /dev/v4l-subdev2 --query-dv-timings | grep 'Active width' | awk '{print $3}')
 
+if [[ $HEIGHT = '0' ]]; then
+     echo 'invalid res, restarting'
+     exit 1
+fi
+
 # ustreamer working great on rpi5 with *some* inputs
 # important to be the same res as dv-timings
 # ustreamer --dv-timings flag not working for me
-ustreamer -m uyvy --host 0.0.0.0 --port=80 --persistent --workers=4 -T --device-timeout 5 -r "$WIDTH"x"$HEIGHT" -f 50
+command="ustreamer -m uyvy --host 0.0.0.0 --port=80 --persistent --workers=4 -T --device-timeout 5 -r "$WIDTH"x"$HEIGHT" -f 50"
+log="$DIR"customustreamer.log
+match1="CAP: Capturing stopped"
+match2="Invalid"
+$command >"$log" 2>&1 &
+pid=$!
+
+while sleep 5; do
+    if fgrep --quiet "$match1" "$log"; then
+        kill $pid
+        exit 0
+    fi
+    if fgrep --quiet "$match2" "$log"; then
+        kill $pid
+        exit 0
+    fi
+done

@@ -41,9 +41,10 @@ After=network-online.target
 
 
 [Service]
-ExecStart=/path/to/script/RPi5_hdmi_in_card/hardcoded.sh
+WorkingDirectory=/path/to/files/
+ExecStart=/path/to/files/hardcoded.sh
 Restart=on-failure
-RestartSec=30
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
