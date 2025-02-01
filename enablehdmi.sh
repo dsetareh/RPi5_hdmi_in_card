@@ -15,7 +15,7 @@ if [[ "${VIDEDID:0:3}" = "720" ]]; then
     WIDTH=1280
     HEIGHT=720
 fi
-
+RESOLUTION=$(echo "$WIDTH"x"$HEIGHT")
 # Finding Media Device
 i=0
 while true; do
@@ -64,13 +64,16 @@ media-ctl -d /dev/media$MEDIADEVICE -r
 # Connect CSI2's pad4 to rp1-cfe-csi2_ch0's pad0.
 media-ctl -d /dev/media$MEDIADEVICE -l ''\''csi2'\'':4 -> '\''rp1-cfe-csi2_ch0'\'':0 [1]'
 # Configure the media node.
-media-ctl -d /dev/media$MEDIADEVICE -V "'\''csi2'\'':0 [fmt:$VIDEOFORMAT/$WIDTHx$HEIGHT field:none colorspace:srgb]"
-media-ctl -d /dev/media$MEDIADEVICE -V "'\''csi2'\'':4 [fmt:$VIDEOFORMAT/$WIDTHx$HEIGHT field:none colorspace:srgb]"
+media-ctl -d /dev/media$MEDIADEVICE -V ''\''csi2'\'':0 [fmt:'$VIDEOFORMAT'/'$RESOLUTION' field:none colorspace:srgb]'
+media-ctl -d /dev/media$MEDIADEVICE -V ''\''csi2'\'':4 [fmt:'$VIDEOFORMAT'/'$RESOLUTION' field:none colorspace:srgb]'
 
-media-ctl -d /dev/media$MEDIADEVICE -V "'\''$DEVICEPAD'\'':0 [fmt:$VIDEOFORMAT/$WIDTHx$HEIGHT field:none colorspace:srgb]"
+media-ctl -d /dev/media$MEDIADEVICE -V ''\'''$DEVICEPAD''\'':0 [fmt:'$VIDEOFORMAT'/'$RESOLUTION' field:none colorspace:srgb]'
 
 #Set the output format.
 v4l2-ctl -v width=$WIDTH,height=$HEIGHT,pixelformat=$PIXELFORMAT
 
-# test frames
-v4l2-ctl --stream-mmap=3 --stream-count=10 --stream-to=/dev/null
+# # test frames
+# v4l2-ctl --stream-mmap=3 --stream-count=10 --stream-to=/dev/null
+
+# ustreamer working great on rpi5 with *some* inputs
+# ustreamer -m uyvy --host 0.0.0.0 --port=80 --persistent   --workers=4 -T  --device-timeout 5 -r 1280x720 -f 60
