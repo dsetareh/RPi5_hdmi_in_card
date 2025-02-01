@@ -1,7 +1,6 @@
 not a huge fan of the og script especially due to it not working (tm)
 
-ustreamer works for me with *some* input sources (output from opiz2w works, output from samsung dex dies after 2 frames)
-`ustreamer -m uyvy --host 0.0.0.0 --port=80 --persistent   --workers=4 -T  --device-timeout 5 -r 1280x720 -f 60`
+tested working on rpi5 with ustreamer
 
 ### notes:
 
@@ -38,12 +37,12 @@ Description=ustreamer hdmi input stream
 After=network.target
 After=systemd-user-sessions.service
 After=network-online.target
-
+StartLimitIntervalSec=0
 
 [Service]
 WorkingDirectory=/path/to/files/
 ExecStart=/path/to/files/hardcoded.sh
-Restart=on-failure
+Restart=always
 RestartSec=5
 
 [Install]
