@@ -1,4 +1,13 @@
 #!/bin/bash
+
+
+
+#scuffed pls dont use
+
+
+
+
+
 MEDIADEVICE=-1
 #SELECT RESOLUTION VALID VALUES (720p60edid, 1080p25edid, 1080p30edid, 1080p50edid, 1080p60edid)
 VIDEDID=720p60edid
