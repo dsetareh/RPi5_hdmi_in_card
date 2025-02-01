@@ -46,7 +46,7 @@ echo "WIDTH: $WIDTH"
 echo "HEIGHT: $HEIGHT"
 echo "DEVICEPAD: $DEVICEPAD"
 echo "PIXELFORMAT: $PIXELFORMAT"
-echo "setting in 2s"
+echo "setting in 2s, make sure something is outputting to the hdmi input"
 sleep 2s
 
 # Loading Driver
