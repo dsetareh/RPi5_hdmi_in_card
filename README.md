@@ -1,3 +1,6 @@
+not a huge fan of og script especially due to it not working (tm)
+
+
 # RPi5_hdmi_in_card
 **Raspberry Pi5 HDMI to CSI-2 input card based on TC358743**
 
